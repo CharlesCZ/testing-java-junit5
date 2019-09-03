@@ -99,7 +99,6 @@
                     <argLine>
                         --illegal-access=permit
                     </argLine>
-                    <excludedGroups>controllers</excludedGroups>
                 </configuration>
             </plugin>
             <plugin>
