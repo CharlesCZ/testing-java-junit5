@@ -10,6 +10,16 @@ public class Owner extends Person {
     private String city;
     private String telephone;
     private Set<Pet> pets = new HashSet<>();
+    private OwnerType ownerType;
+
+
+    public OwnerType getOwnerType() {
+        return ownerType;
+    }
+
+    public void setOwnerType(OwnerType ownerType) {
+        this.ownerType = ownerType;
+    }
 
     public Owner(Long id, String firstName, String lastName) {
         super(id, firstName, lastName);
