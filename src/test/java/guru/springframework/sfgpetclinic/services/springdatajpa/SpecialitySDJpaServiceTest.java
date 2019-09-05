@@ -15,6 +15,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.*;
 
 
@@ -96,14 +97,16 @@ class SpecialitySDJpaServiceTest {
 
     @Test
     void findByIdBddTest() {
+        //given
         Speciality speciality=new Speciality();
-
         given(specialtyRepository.findById(1l)).willReturn(Optional.of(speciality));
 
+        //when
         Speciality foundSpeciality=service.findById(1l);
 
+        //then
         assertThat(foundSpeciality).isNotNull();
-        verify(specialtyRepository).findById(anyLong());
-
+        then(specialtyRepository).should().findById(anyLong());
+        then(specialtyRepository).shouldHaveNoMoreInteractions();
     }
 }
