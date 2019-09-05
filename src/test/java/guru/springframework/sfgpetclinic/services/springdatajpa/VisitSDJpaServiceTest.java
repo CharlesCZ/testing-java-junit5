@@ -33,6 +33,7 @@ class VisitSDJpaServiceTest {
     @DisplayName("Test Find All")
     @Test
     void findAll() {
+        //given
         Set<Visit> visits=new HashSet<>();
         visits.add(new Visit());
         visits.add(new Visit());
@@ -91,6 +92,7 @@ class VisitSDJpaServiceTest {
     @Test
     void deleteById() {
 
+        //when
         service.deleteById(1L);
 
         verify(visitRepository).deleteById(anyLong());
