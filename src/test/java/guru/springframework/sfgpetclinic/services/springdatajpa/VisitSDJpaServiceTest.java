@@ -17,6 +17,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -36,16 +38,15 @@ class VisitSDJpaServiceTest {
         //given
         Set<Visit> visits=new HashSet<>();
         visits.add(new Visit());
-        visits.add(new Visit());
 
-        when(visitRepository.findAll()).thenReturn(visits);
+        given(visitRepository.findAll()).willReturn(visits);
 
         //when
         Set<Visit> returnedVisits=service.findAll();
 
         //then
-        verify(visitRepository).findAll();
-        assertEquals(2l,returnedVisits.size());
+        then(visitRepository).should().findAll();
+        assertEquals(1l,returnedVisits.size());
 
     }
 
@@ -53,14 +54,13 @@ class VisitSDJpaServiceTest {
     void findById() {
         //given
         Visit visit=new Visit(1L);
-
-        when(visitRepository.findById(anyLong())).thenReturn(Optional.of(visit));
+        given(visitRepository.findById(anyLong())).willReturn(Optional.of(visit));
 
         //when
         Visit returnedVisit=service.findById(1L);
 
         //then
-        verify(visitRepository).findById(1L);
+        then(visitRepository).should().findById(1L);
         assertEquals(Long.valueOf(1L),returnedVisit.getId());
     }
 
@@ -68,14 +68,13 @@ class VisitSDJpaServiceTest {
     void save() {
         //given
         Visit visit=new Visit();
-
-        when(visitRepository.save(any(Visit.class))).thenReturn(visit);
+        given(visitRepository.save(any(Visit.class))).willReturn(visit);
 
         //when
         Visit returnedVisit=service.save(visit);
-        //then
-        verify(visitRepository).save(any(Visit.class));
 
+        //then
+        then(visitRepository).should().save(any(Visit.class));
         assertThat(returnedVisit).isNotNull();
     }
 
@@ -84,9 +83,11 @@ class VisitSDJpaServiceTest {
         //given
         Visit visit=new Visit();
 
+        //when
         service.delete(visit);
 
-        verify(visitRepository).delete(any(Visit.class));
+        //then
+        then(visitRepository).should().delete(any(Visit.class));
     }
 
     @Test
@@ -95,7 +96,8 @@ class VisitSDJpaServiceTest {
         //when
         service.deleteById(1L);
 
-        verify(visitRepository).deleteById(anyLong());
+        //then
+        then(visitRepository).should().deleteById(anyLong());
 
     }
 }
