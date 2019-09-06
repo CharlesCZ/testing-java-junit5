@@ -72,25 +72,12 @@ ArgumentCaptor<String> stringArgumentCaptor;
         Owner owner = new Owner(null,"Iks","Iksinski");
 
         //when
-        String viewName=ownerController.processFindForm(owner,bindingResult,null);
+        String viewName=ownerController.processFindForm(owner,bindingResult,model);
 
         //then
         assertThat(stringArgumentCaptor.getValue()).isEqualToIgnoringCase("%Iksinski%");
-
         assertThat("redirect:/owners/1").isEqualToIgnoringCase(viewName);
-    }
-
-    @Test
-    void processFindFormWildcardNotFound() {
-        //given
-        Owner owner = new Owner(null,"Iks","DontFindMe");
-
-        //when
-        String viewName=ownerController.processFindForm(owner,bindingResult,null);
-
-        //then
-        assertThat(stringArgumentCaptor.getValue()).isEqualToIgnoringCase("%DontFindMe%");
-        assertThat("owners/findOwners").isEqualToIgnoringCase(viewName);
+        verifyZeroInteractions(model);
     }
 
     @Test
@@ -110,8 +97,25 @@ ArgumentCaptor<String> stringArgumentCaptor;
         //inorder asserts
         inOrder.verify(ownerService).findAllByLastNameLike(anyString());
         inOrder.verify(model).addAttribute(anyString(),anyList());
+        verifyNoMoreInteractions(model);
 
     }
+
+    @Test
+    void processFindFormWildcardNotFound() {
+        //given
+        Owner owner = new Owner(null,"Iks","DontFindMe");
+
+        //when
+        String viewName=ownerController.processFindForm(owner,bindingResult,model);
+
+        verifyNoMoreInteractions(ownerService);
+        //then
+        assertThat(stringArgumentCaptor.getValue()).isEqualToIgnoringCase("%DontFindMe%");
+        assertThat("owners/findOwners").isEqualToIgnoringCase(viewName);
+        verifyZeroInteractions(model);
+    }
+
     @Test
     void processCreationFormHappyPath() {
         //given
